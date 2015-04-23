@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="background_color">#343434</color>
+    <color name="secondary_background_color">#848484</color>
+    <color name="text_color">#5C5C5C</color>
+    <color name="facebook_color">#3D59AB</color>
+    <color name="twitter_color">#009ACD</color>
+    
+    
+</resources>

@@ -1,0 +1,11 @@
+.idea
+.gradle
+build
+gradle
+build.gradle
+gradlew
+gradlew.bat
+Homework.iml
+import-summary.txt
+local.properties
+settings.gradle
