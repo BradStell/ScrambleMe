@@ -15,6 +15,9 @@ ADDED from AndroidManifest.xml:2:1
 		INJECTED from AndroidManifest.xml:0:0
 uses-sdk
 ADDED from AndroidManifest.xml:7:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.facebook.android:facebook-android-sdk:4.0.0:24:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
 	android:targetSdkVersion
 		ADDED from AndroidManifest.xml:9:9
 		INJECTED from AndroidManifest.xml:0:0
@@ -45,6 +48,9 @@ ADDED from AndroidManifest.xml:15:5
 		ADDED from AndroidManifest.xml:15:22
 application
 ADDED from AndroidManifest.xml:17:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.facebook.android:facebook-android-sdk:4.0.0:28:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
 	android:label
 		ADDED from AndroidManifest.xml:21:9
 	android:allowBackup
@@ -92,8 +98,24 @@ ADDED from AndroidManifest.xml:40:9
 	android:name
 		ADDED from AndroidManifest.xml:41:13
 activity#com.elitetek.scrambleme.SignupActivity
-ADDED from AndroidManifest.xml:44:9
+ADDED from AndroidManifest.xml:43:9
 	android:label
-		ADDED from AndroidManifest.xml:46:13
-	android:name
 		ADDED from AndroidManifest.xml:45:13
+	android:name
+		ADDED from AndroidManifest.xml:44:13
+activity#com.facebook.FacebookActivity
+ADDED from AndroidManifest.xml:46:9
+	android:label
+		ADDED from AndroidManifest.xml:49:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:48:13
+	android:theme
+		ADDED from AndroidManifest.xml:50:13
+	android:name
+		ADDED from AndroidManifest.xml:47:13
+meta-data#com.facebook.sdk.ApplicationId
+ADDED from AndroidManifest.xml:52:9
+	android:name
+		ADDED from AndroidManifest.xml:53:13
+	android:value
+		ADDED from AndroidManifest.xml:54:13
