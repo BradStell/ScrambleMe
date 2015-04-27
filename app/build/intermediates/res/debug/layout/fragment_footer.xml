@@ -10,7 +10,7 @@
     <!-- TODO: Update blank fragment layout -->
 
         <Button
-            android:id="@+id/buttonCamera"
+            android:id="@+id/buttonTweetLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5sp"
@@ -23,10 +23,10 @@
             android:text="@string/text_camera" />
 
         <Button
-            android:id="@+id/buttonGallery"
+            android:id="@+id/buttonFbLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/buttonCamera"
+            android:layout_below="@+id/buttonTweetLogin"
             android:background="@drawable/gradient_button"
             android:drawableLeft="@drawable/photo_smaller"
             android:drawableStart="@drawable/photo_smaller"

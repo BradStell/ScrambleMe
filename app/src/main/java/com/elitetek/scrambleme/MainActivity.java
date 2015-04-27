@@ -16,7 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elitetek.scrambleme.database.DataManager;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.parse.ParseUser;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -35,12 +40,40 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
 		dataManager = new DataManager(this);
 
 		getFragmentManager().beginTransaction()
-    		.add(R.id.container, new MainFragment(), "main")
+        		.add(R.id.container, new MainFragment(), "main")
     		.add(R.id.footer, new FooterFragment(), "footer")
     		.commit();
 
 		setupActionBar();
 	}
+
+    public void graphRequest() {
+        GraphRequest request = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        Log.d("JSON", object.toString());
+                        UserInfo userInfo = new UserInfo(object);
+                    }
+                });
+        Bundle params = new Bundle();
+        params.putString("name", "ScrambleMe");
+        //new FaceBookGraphAPI().execute("https://graph.facebook.com/v2.1/10150220813846431/photos?access_token=" + AccessToken.getCurrentAccessToken().getToken());
+
+        //String response = mFacebook.request("https://graph.facebook.com/me/albums",params,"POST");
+        //GraphRequest.nre
+        //String albumId=Util.parseJson(response).getString("id");
+
+        GraphRequest graphRequest = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(), "me/albums", new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+
+            }
+        });
+    }
 
     private void setupActionBar() {
         /** Setup the custum action bar */

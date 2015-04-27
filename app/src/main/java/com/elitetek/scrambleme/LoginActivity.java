@@ -1,23 +1,26 @@
 package com.elitetek.scrambleme;
 
+
+import com.facebook.AccessToken;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class LoginActivity extends Activity implements View.OnClickListener {
 
@@ -38,9 +41,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		login.setOnClickListener(this);
 		create = (Button) findViewById(R.id.buttonCreateAccount);
 		create.setOnClickListener(this);
-		facebook = (Button) findViewById(R.id.buttonGallery);
+		facebook = (Button) findViewById(R.id.buttonFbLogin);
 		facebook.setOnClickListener(this);
-		twitter = (Button) findViewById(R.id.buttonCamera);
+		twitter = (Button) findViewById(R.id.buttonTweetLogin);
 		twitter.setOnClickListener(this);
 
 		TextView title = (TextView) findViewById(R.id.textViewTitle);
@@ -90,61 +93,92 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		
 		
 		// Check to see if the user is already logged in
-		ParseUser currentUser = ParseUser.getCurrentUser();
-		if (currentUser != null) {
-			// go to main activity
-			Toast.makeText(LoginActivity.this, "Welcome " + currentUser.getString("nameWithCase"), Toast.LENGTH_LONG).show();
-			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-	    	finish();
-	    	startActivity(intent);
-		}	
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null&& ParseFacebookUtils.isLinked(currentUser)){
+            // go to main activity
+            Toast.makeText(LoginActivity.this, "Welcome " + currentUser.getString("nameWithCase"), Toast.LENGTH_LONG).show();
+            startMainActivity();
+        }
 	}
+
+    private void startMainActivity() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
 
 	@Override
 	public void onClick(View v) {
 		
 		switch (v.getId()) {
-			case R.id.buttonLogin:
-				
-				if (email.getText().length() == 0 && password.getText().length() > 0) 
-					Toast.makeText(LoginActivity.this, "Email Blank!", Toast.LENGTH_LONG).show();
-				else if (password.getText().length() == 0 && email.getText().length() > 0)
-					Toast.makeText(LoginActivity.this, "Password Blank!", Toast.LENGTH_LONG).show();
-				else if (email.getText().length() == 0 && password.getText().length() == 0)
-					Toast.makeText(LoginActivity.this, "Email and Password Field Are Blank!", Toast.LENGTH_LONG).show();
-				else {
-				
-					ParseUser.logInInBackground(email.getText().toString().toLowerCase(), password.getText().toString(), new LogInCallback() {
-						  public void done(ParseUser user, ParseException e) {
-						    if (user != null) {
-						    	// User Logged In
-						    	Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-						    	finish();
-						    	startActivity(intent);				    	
-						    } else {					      
-						    	Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
-						    	email.setText("");
-						    	password.setText("");
-						    }
-						  }
-					});	
-				}
-				
-				break;
-			case R.id.buttonCreateAccount:
-				
-				Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-				finish();
-				startActivity(intent);
-				
-				break;
-			case R.id.buttonGallery:
-				
-				break;
-			case R.id.buttonCamera:
-				
-				break;
-		}
-		
-	}
+            case R.id.buttonLogin:
+
+                if (email.getText().length() == 0 && password.getText().length() > 0)
+                    Toast.makeText(LoginActivity.this, "Email Blank!", Toast.LENGTH_LONG).show();
+                else if (password.getText().length() == 0 && email.getText().length() > 0)
+                    Toast.makeText(LoginActivity.this, "Password Blank!", Toast.LENGTH_LONG).show();
+                else if (email.getText().length() == 0 && password.getText().length() == 0)
+                    Toast.makeText(LoginActivity.this, "Email and Password Field Are Blank!", Toast.LENGTH_LONG).show();
+                else {
+
+                    ParseUser.logInInBackground(email.getText().toString().toLowerCase(), password.getText().toString(), new LogInCallback() {
+                        public void done(ParseUser user, ParseException e) {
+                            if (user != null) {
+                                // User Logged In
+                                startMainActivity();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
+                                email.setText("");
+                                password.setText("");
+                            }
+                        }
+                    });
+                }
+
+                break;
+            case R.id.buttonCreateAccount:
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.buttonFbLogin:
+                List<String> permissions = Arrays.asList("public_profile", "email","read_custom_friendlists","user_photos");
+
+                ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this, permissions, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException err) {
+                        if (user == null) {
+
+                            Toast.makeText(getBaseContext(),"Failed Login. You may not have facebook app on your device.", Toast.LENGTH_LONG).show();
+                            Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+                        } else if (user.isNew()) {
+                            Log.d("token",user.getSessionToken());
+
+
+                            Toast.makeText(getBaseContext(),"Welcome " + user.getUsername(), Toast.LENGTH_LONG).show();
+                            startMainActivity();
+                            Log.d("MyApp", "User signed up and logged in through Facebook!");
+                        } else {
+                            Toast.makeText(getBaseContext(),"Welcome " + user.getUsername(), Toast.LENGTH_LONG).show();
+
+                            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                            Log.d("Permissions", accessToken.getToken());
+
+                            startMainActivity();
+                            Log.d("MyApp", "User logged in through Facebook!");
+                        }
+                    }
+                });
+
+                break;
+            case R.id.buttonTweetLogin:
+
+                break;
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.onActivityResult(requestCode,resultCode,data);
+    }
 }

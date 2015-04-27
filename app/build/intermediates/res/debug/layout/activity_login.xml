@@ -109,7 +109,7 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/buttonGallery"
+            android:id="@+id/buttonFbLogin"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15sp"
@@ -122,7 +122,7 @@
             android:text="@string/button_facebook" />
 
         <Button
-            android:id="@+id/buttonCamera"
+            android:id="@+id/buttonTweetLogin"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20sp"

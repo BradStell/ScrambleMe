@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +21,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -56,8 +54,8 @@ public class FooterFragment extends Fragment implements View.OnClickListener {
 		/***** UI SETUP ***************************************************************************************************/
 		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/CaviarDreams.ttf");
 		
-		gallery = (Button) getActivity().findViewById(R.id.buttonGallery);
-		camera = (Button) getActivity().findViewById(R.id.buttonCamera);
+		gallery = (Button) getActivity().findViewById(R.id.buttonFbLogin);
+		camera = (Button) getActivity().findViewById(R.id.buttonTweetLogin);
 		
 		gallery.setTypeface(textFont);
 		gallery.setTextColor(Color.BLACK);
@@ -103,7 +101,7 @@ public class FooterFragment extends Fragment implements View.OnClickListener {
 		
 		switch (v.getId()) {
 		
-			case R.id.buttonCamera:
+			case R.id.buttonTweetLogin:
 				
 				Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 				if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -122,7 +120,7 @@ public class FooterFragment extends Fragment implements View.OnClickListener {
 				}				
 				break;
 				
-			case R.id.buttonGallery:
+			case R.id.buttonFbLogin:
 				
 				Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 				photoPickerIntent.setType("image/*");
