@@ -4,21 +4,37 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
-    <ImageView
-        android:id="@+id/imageViewNormal"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10sp"
-        android:layout_weight="1"
-        android:src="@drawable/ic_launcher" />
+        android:layout_height="100dp"
+        android:layout_weight="1">
 
-    <ImageView
-        android:id="@+id/imageViewScrambled"
+        <ImageView
+            android:id="@+id/imageViewNormal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_launcher"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10sp"
-        android:layout_weight="1"
-        android:src="@drawable/ic_launcher" />
+        android:layout_height="100dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/imageViewScrambled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_launcher"
+            android:layout_gravity="center" />
+    </LinearLayout>
 
 </LinearLayout>
 <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/layout/gallery_custom_view.xml -->

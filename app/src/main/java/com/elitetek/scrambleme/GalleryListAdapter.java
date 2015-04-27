@@ -2,22 +2,19 @@ package com.elitetek.scrambleme;
 
 import java.util.ArrayList;
 
-import com.squareup.picasso.Picasso;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-public class GalleryListAdapter extends ArrayAdapter<Image> {
+public class GalleryListAdapter extends ArrayAdapter<ImagePairs> {
 	
 	Context context;
-	ArrayList<Image> objects;
+	ArrayList<ImagePairs> objects;
 	
-	public GalleryListAdapter(Context context, ArrayList<Image> objects) {
+	public GalleryListAdapter(Context context, ArrayList<ImagePairs> objects) {
 		super(context, R.layout.gallery_custom_view, objects);
 		this.context = context;
 		this.objects = objects;
@@ -37,9 +34,9 @@ public class GalleryListAdapter extends ArrayAdapter<Image> {
 		}
 
 		holder = (ViewHolder) convertView.getTag();
-		Image image = objects.get(position);
-		holder.normalPic.setImageBitmap(image.getOriginalPic());
-		holder.scrambledPic.setImageBitmap(image.getScrambledPic());
+        ImagePairs imagePairs = objects.get(position);
+		holder.normalPic.setImageBitmap(imagePairs.getNormalImage());
+		holder.scrambledPic.setImageBitmap(imagePairs.getScrambledImage());
 
 		return convertView;
 	}

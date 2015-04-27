@@ -5,22 +5,25 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.app.ProgressDialog;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import com.elitetek.scrambleme.database.DataManager;
 
 
 public class MainFragment extends Fragment {
 
 	
 	ListView root;
-	ArrayList<Image> picturesList;
+    DataManager dataManager;
+	ArrayList<ImagePairs> picturesList;
 	private OnFragmentInteractionListener mListener;
 
 	public MainFragment() {
@@ -30,62 +33,14 @@ public class MainFragment extends Fragment {
 	@SuppressLint("NewApi")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);		
-		
-		//TextView title = (TextView) getActivity().findViewById(R.id.textViewGalleryTitle);
+		super.onActivityCreated(savedInstanceState);
+
 		Typeface titleFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/FFF_Tusj.ttf");
-		//title.setTypeface(titleFont);
-		//title.setTextSize(getActivity().getResources().getDimension(R.dimen.main_title_text_size));
-		//title.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
-		
-		
-		/***********  Dummy Pictures for testing purposes *********************************/
-		
-		Image i1 = new Image();
-		Bitmap map = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.me);
-		i1.setOriginalPic(map);
-		i1.setScrambledPic(map);
-		
-		Image i2 = new Image();
-		map = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.plant);
-		i2.setOriginalPic(map);
-		i2.setScrambledPic(map);
-		
-		Image i3 = new Image();
-		map = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.me);
-		i3.setOriginalPic(map);
-		i3.setScrambledPic(map);
-		
-		Image i4 = new Image();
-		map = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.plant);
-		i4.setOriginalPic(map);
-		i4.setScrambledPic(map);
-		
-		Image i5 = new Image();
-		map = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.me);
-		i5.setOriginalPic(map);
-		i5.setScrambledPic(map);
-		
-		Image i6 = new Image();
-		map = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.plant);
-		i6.setOriginalPic(map);
-		i6.setScrambledPic(map);
-		
-		picturesList = new ArrayList<Image>();
-		picturesList.add(i1);
-		picturesList.add(i2);
-		picturesList.add(i3);
-		picturesList.add(i4);
-		picturesList.add(i5);
-		picturesList.add(i6);
-		
-		
-		/***********  Dummy Pictures for testing purposes *********************************/
-		
-		root = (ListView) getActivity().findViewById(R.id.listViewRoot);
-		GalleryListAdapter adapter = new GalleryListAdapter(getActivity(), picturesList);
-		adapter.setNotifyOnChange(true);
-		root.setAdapter(adapter);
+
+        root = (ListView) getActivity().findViewById(R.id.listViewRoot);
+        dataManager = new DataManager(getActivity());
+
+        new GetPicturesAsyncTask().execute();
 	}
 
 	@Override
@@ -113,4 +68,40 @@ public class MainFragment extends Fragment {
 	public interface OnFragmentInteractionListener {
 		public void fromMainFragment();
 	}
+
+    public class GetPicturesAsyncTask extends AsyncTask<Void, Void, ArrayList<ImagePairs>> {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected ArrayList<ImagePairs> doInBackground(Void... params) {
+            // TODO code to retrieve pictures from database
+            return dataManager.getAllSavedImages();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            picturesList = new ArrayList<ImagePairs>();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Fetching Pictures");
+            progressDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<ImagePairs> result) {
+            super.onPostExecute(result);
+
+            if (result != null) {
+                GalleryListAdapter adapter = new GalleryListAdapter(getActivity(), result);
+                adapter.setNotifyOnChange(true);
+                root.setAdapter(adapter);
+            } else {
+                Toast.makeText(getActivity(), "No Scrambled Images Yet", Toast.LENGTH_SHORT).show();
+            }
+
+            progressDialog.dismiss();
+        }
+    }
 }

@@ -2,7 +2,9 @@ package com.elitetek.scrambleme;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,40 +13,52 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.elitetek.scrambleme.database.DataManager;
 import com.parse.ParseUser;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 public class MainActivity extends Activity implements MainFragment.OnFragmentInteractionListener,
 													  FooterFragment.OnFragmentInteractionListener,
 													  ScrambleFragment.OnFragmentInteractionListener {
 
 	String pathToPhoto;
+    DataManager dataManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+		dataManager = new DataManager(this);
+
 		getFragmentManager().beginTransaction()
     		.add(R.id.container, new MainFragment(), "main")
     		.add(R.id.footer, new FooterFragment(), "footer")
-    		.commit();	
-		
-		ActionBar mActionBar = getActionBar();
-		mActionBar.setDisplayShowHomeEnabled(false);
-		mActionBar.setDisplayShowTitleEnabled(false);
-		LayoutInflater mInflater = LayoutInflater.from(this);
+    		.commit();
 
-		Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/FFF_Tusj.ttf");
-		
-		View mCustomView = mInflater.inflate(R.layout.custum_action_bar, null);
-		TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.textViewActionBarTitle);
-		mTitleTextView.setText("My Scrambles");
-		mTitleTextView.setTypeface(titleFont);		
-
-		mActionBar.setCustomView(mCustomView);
-		mActionBar.setDisplayShowCustomEnabled(true);
+		setupActionBar();
 	}
+
+    private void setupActionBar() {
+        /** Setup the custum action bar */
+        ActionBar mActionBar = getActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
+
+        Typeface titleFont = Typeface.createFromAsset(getAssets(), "fonts/FFF_Tusj.ttf");
+
+        View mCustomView = mInflater.inflate(R.layout.custum_action_bar, null);
+        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.textViewActionBarTitle);
+        mTitleTextView.setText("Scrambles");
+        mTitleTextView.setTypeface(titleFont);
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,6 +70,7 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		int id = item.getItemId();
+        ScrambleFragment scramFrag = (ScrambleFragment) getFragmentManager().findFragmentByTag("scramble");
 		
 		if (id == R.id.logout) {
 			
@@ -66,6 +81,20 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
 			
 			return true;
 		}
+        else if (id == R.id.share) {
+
+            if (scramFrag != null)
+                scramFrag.handleMenuPress(id);
+            else
+                Toast.makeText(this, "Choose an image to share first", Toast.LENGTH_SHORT).show();
+        }
+        else if (id == R.id.save) {
+
+            if (scramFrag != null)
+                scramFrag.handleMenuPress(id);
+            else
+                Toast.makeText(this, "Choose an image to save first", Toast.LENGTH_SHORT).show();
+        }
 		
 		return super.onOptionsItemSelected(item);
 	}
@@ -102,4 +131,12 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
 			.add(R.id.footer, new FooterFragment(), "footer")
 			.commit();
 	}
+
+    @Override
+    public void fromScramFragSaveToDatabase(Bitmap normal, Bitmap scrambled) {
+        ImagePairs imagePairs = new ImagePairs();
+        imagePairs.setNormalImage(normal);
+        imagePairs.setScrambledImage(scrambled);
+        dataManager.saveImagePair(imagePairs);
+    }
 }

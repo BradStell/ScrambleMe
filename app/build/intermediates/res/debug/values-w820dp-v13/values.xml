@@ -2,5 +2,5 @@
 <resources>
     <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/values-w820dp/dimens.xml -->
     <eat-comment/>
-    <dimen name="activity_horizontal_margin">64dp</dimen>
+    <dimen name="activity_horizontal_margin">5dp</dimen>
 </resources>

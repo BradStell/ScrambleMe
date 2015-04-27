@@ -37,7 +37,6 @@ public class FooterFragment extends Fragment implements View.OnClickListener {
 	Button gallery;
 	Button camera;
 	private OnFragmentInteractionListener mListener;
-	
 	private ImageView mImageView;
 	private static final int PICK_FROM_CAMERA = 1;
 	private static final int PICK_FROM_FILE = 2;
@@ -148,9 +147,6 @@ public class FooterFragment extends Fragment implements View.OnClickListener {
 			if (resultCode == getActivity().RESULT_OK) {
 				if (mCurrentPhotoPath != null) {
 					galleryAddPic();
-					//Intent intent = new Intent(ImagePickerActivity.this, ScrambleImageActivity.class);
-					//intent.putExtra("filename", mCurrentPhotoPath);
-					//startActivityForResult(intent, SCRAMBLE_IMAGE);
 					mListener.fromFooterFragment(mCurrentPhotoPath);
 				}
 			}			
@@ -203,8 +199,7 @@ public class FooterFragment extends Fragment implements View.OnClickListener {
 				}
 			}
 		} else {
-			Log.v(getString(R.string.app_name),
-					"External storage is not mounted READ/WRITE.");
+			Log.v(getString(R.string.app_name), "External storage is not mounted READ/WRITE.");
 		}
 		return storageDir;
 	}
