@@ -7,6 +7,7 @@ public class ImageTable {
 	
 	public static final String TABLE_NAME = "ImagePairs";
 	public static final String IMAGE_ID = "id";
+    public static final String IMAGE_OWNER = "owner";
 	public static final String IMAGE_NORMAL = "imageNormal";
     public static final String IMAGE_SCRAMBLED = "imageScrambled";
 
@@ -15,6 +16,7 @@ public class ImageTable {
 		StringBuilder sb = new StringBuilder();
 		sb.append("CREATE TABLE " + TABLE_NAME + " (");
 		sb.append(IMAGE_ID + " text primary key, ");
+        sb.append(IMAGE_OWNER + " text not null, ");
 		sb.append(IMAGE_NORMAL + " text not null, ");
 		sb.append(IMAGE_SCRAMBLED + " text not null");
 		sb.append(");");

@@ -10,11 +10,20 @@ import java.util.Random;
 public class ImagePairs {
 
     private int id;
+    private String ownerName;
     private Bitmap normalImage, scrambledImage;
 
     public ImagePairs () {
         Random rand = new Random(System.nanoTime());
         id = rand.nextInt();
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     public int getId() {

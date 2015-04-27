@@ -168,6 +168,7 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
     @Override
     public void fromScramFragSaveToDatabase(Bitmap normal, Bitmap scrambled) {
         ImagePairs imagePairs = new ImagePairs();
+        imagePairs.setOwnerName(ParseUser.getCurrentUser().getString("username"));
         imagePairs.setNormalImage(normal);
         imagePairs.setScrambledImage(scrambled);
         dataManager.saveImagePair(imagePairs);

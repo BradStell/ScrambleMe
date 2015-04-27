@@ -1,6 +1,7 @@
 package com.elitetek.scrambleme.database;
 
 import com.elitetek.scrambleme.ImagePairs;
+import com.parse.ParseUser;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -36,6 +37,7 @@ public class ImageDAO {
         String pathToScrambledFile = DbBitmapUtility.saveBitmapToFile(imagePairs.getScrambledImage());
 
         values.put(ImageTable.IMAGE_ID, imagePairs.getId());
+        values.put(ImageTable.IMAGE_OWNER, imagePairs.getOwnerName());
 	 	values.put(ImageTable.IMAGE_NORMAL, pathToNormalFile);
 	 	values.put(ImageTable.IMAGE_SCRAMBLED, pathToScrambledFile);
 	 	 
@@ -49,7 +51,7 @@ public class ImageDAO {
 	public ImagePairs get(String id){
 
          ImagePairs imagePairs = null;
-	 	 Cursor c = db.query(true, ImageTable.TABLE_NAME, new String[] {ImageTable.IMAGE_ID, ImageTable.IMAGE_NORMAL, ImageTable.IMAGE_SCRAMBLED}, ImageTable.IMAGE_ID + "=" + id, null, null, null, null, null);
+	 	 Cursor c = db.query(true, ImageTable.TABLE_NAME, new String[] {ImageTable.IMAGE_ID, ImageTable.IMAGE_OWNER, ImageTable.IMAGE_NORMAL, ImageTable.IMAGE_SCRAMBLED}, ImageTable.IMAGE_ID + "=" + id, null, null, null, null, null);
 	 	 
 	 	 if(c != null){
 			 c.moveToFirst();			 
@@ -66,7 +68,7 @@ public class ImageDAO {
     public ArrayList<ImagePairs> getAllSavedImages() {
         ArrayList<ImagePairs> imageList = new ArrayList<ImagePairs>();
 
-        Cursor c = db.rawQuery("SELECT * FROM " + ImageTable.TABLE_NAME, null);
+        Cursor c = db.rawQuery("SELECT * FROM " + ImageTable.TABLE_NAME + " WHERE username = " + ParseUser.getCurrentUser().getString("username"), null);
 
         if (c != null) {
             c.moveToFirst();
@@ -87,8 +89,9 @@ public class ImageDAO {
         while(! c.isAfterLast()) {
             imagePairs = new ImagePairs();
             imagePairs.setId(Integer.parseInt(c.getString(0)));
-            imagePairs.setNormalImage( DbBitmapUtility.getBitmapFromFile(c.getString(1)));
-            imagePairs.setScrambledImage( DbBitmapUtility.getBitmapFromFile(c.getString(2)));
+            imagePairs.setOwnerName(c.getString(1));
+            imagePairs.setNormalImage( DbBitmapUtility.getBitmapFromFile(c.getString(2)));
+            imagePairs.setScrambledImage( DbBitmapUtility.getBitmapFromFile(c.getString(3)));
             imageList.add(imagePairs);
             c.moveToNext();
         }
@@ -100,8 +103,9 @@ public class ImageDAO {
 	 	 if(c != null) {
 	 		 imagePairs = new ImagePairs();
 	 		 imagePairs.setId(Integer.parseInt(c.getString(0)));
-	 		 imagePairs.setNormalImage(DbBitmapUtility.getImage(c.getBlob(1)));
-	 		 imagePairs.setScrambledImage(DbBitmapUtility.getImage(c.getBlob(2)));
+             imagePairs.setOwnerName(c.getString(1));
+	 		 imagePairs.setNormalImage(DbBitmapUtility.getImage(c.getBlob(2)));
+	 		 imagePairs.setScrambledImage(DbBitmapUtility.getImage(c.getBlob(3)));
 	 	 }
 	 	 return imagePairs;
 	}
