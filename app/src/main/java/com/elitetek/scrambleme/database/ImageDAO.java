@@ -1,24 +1,20 @@
 package com.elitetek.scrambleme.database;
-
 import com.elitetek.scrambleme.ImagePairs;
+
 import com.parse.ParseUser;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Environment;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ImageDAO {
 
@@ -31,8 +27,6 @@ public class ImageDAO {
 	public long save(ImagePairs imagePairs){
 	 	ContentValues values = new ContentValues();
 
-        //TODO remove blob and turn into path to .jpg
-
         String pathToNormalFile = DbBitmapUtility.saveBitmapToFile(imagePairs.getNormalImage());
         String pathToScrambledFile = DbBitmapUtility.saveBitmapToFile(imagePairs.getScrambledImage());
 
@@ -44,14 +38,41 @@ public class ImageDAO {
 	 	return db.insert(ImageTable.TABLE_NAME, null, values);
 	}
 	
-	public boolean delete(ImagePairs imagePairs){
-		return db.delete(ImageTable.TABLE_NAME, ImageTable.IMAGE_ID + "=" + imagePairs.getId(), null) > 0;
+	public boolean delete(int id){
+		return db.delete(ImageTable.TABLE_NAME, ImageTable.IMAGE_ID + "=" + id, null) > 0;
 	}
+
+    public String getScrambledImagePath(int id) {
+
+        String imagePath = null;
+
+        Cursor c = db.query(true,
+                ImageTable.TABLE_NAME,
+                new String[] {ImageTable.IMAGE_ID, ImageTable.IMAGE_OWNER, ImageTable.IMAGE_NORMAL,
+                        ImageTable.IMAGE_SCRAMBLED}, ImageTable.IMAGE_ID + "=" + id,
+                null, null, null, null, null);
+
+        if(c != null){
+            c.moveToFirst();
+            if (!c.isAfterLast()) {
+                imagePath = getImagePathFromCursor(c);
+            }
+            if(!c.isClosed()){
+                c.close();
+            }
+        }
+        return imagePath;
+
+    }
 	
-	public ImagePairs get(String id){
+	public ImagePairs get(int id){
 
          ImagePairs imagePairs = null;
-	 	 Cursor c = db.query(true, ImageTable.TABLE_NAME, new String[] {ImageTable.IMAGE_ID, ImageTable.IMAGE_OWNER, ImageTable.IMAGE_NORMAL, ImageTable.IMAGE_SCRAMBLED}, ImageTable.IMAGE_ID + "=" + id, null, null, null, null, null);
+	 	 Cursor c = db.query(true,
+                 ImageTable.TABLE_NAME,
+                 new String[] {ImageTable.IMAGE_ID, ImageTable.IMAGE_OWNER, ImageTable.IMAGE_NORMAL,
+                 ImageTable.IMAGE_SCRAMBLED}, ImageTable.IMAGE_ID + "=" + id,
+                 null, null, null, null, null);
 	 	 
 	 	 if(c != null){
 			 c.moveToFirst();			 
@@ -68,7 +89,7 @@ public class ImageDAO {
     public ArrayList<ImagePairs> getAllSavedImages() {
         ArrayList<ImagePairs> imageList = new ArrayList<ImagePairs>();
 
-        Cursor c = db.rawQuery("SELECT * FROM " + ImageTable.TABLE_NAME + " WHERE username = " + ParseUser.getCurrentUser().getString("username"), null);
+        Cursor c = db.rawQuery("SELECT * FROM " + ImageTable.TABLE_NAME + " WHERE " + ImageTable.IMAGE_OWNER + "='" + ParseUser.getCurrentUser().getString("username") + "'", null);
 
         if (c != null) {
             c.moveToFirst();
@@ -104,12 +125,21 @@ public class ImageDAO {
 	 		 imagePairs = new ImagePairs();
 	 		 imagePairs.setId(Integer.parseInt(c.getString(0)));
              imagePairs.setOwnerName(c.getString(1));
-	 		 imagePairs.setNormalImage(DbBitmapUtility.getImage(c.getBlob(2)));
-	 		 imagePairs.setScrambledImage(DbBitmapUtility.getImage(c.getBlob(3)));
+	 		 imagePairs.setNormalImage(DbBitmapUtility.getBitmapFromFile(c.getString(2)));
+	 		 imagePairs.setScrambledImage(DbBitmapUtility.getBitmapFromFile(c.getString(3)));
 	 	 }
 	 	 return imagePairs;
 	}
 
+    private String getImagePathFromCursor(Cursor c){
+
+        return c.getString(3);
+
+    }
+
+    /**
+     * Inner class for Bitmap/File manipulation
+     */
     public static class DbBitmapUtility {
 
         // convert from bitmap to byte array
@@ -124,7 +154,6 @@ public class ImageDAO {
             return BitmapFactory.decodeByteArray(image, 0, image.length);
         }
 
-        //TODO save bitmap to file & retrieve from database back to bitmap
         public static String saveBitmapToFile(Bitmap bitmap) {
 
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -146,19 +175,41 @@ public class ImageDAO {
 
         public static Bitmap getBitmapFromFile(String path) {
 
-            Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + path);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + path, options);
+            int imageHeight = options.outHeight;
+            int imageWidth = options.outWidth;
+            String imageType = options.outMimeType;
 
-           /* ByteArrayOutputStream blob = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0 *//*ignored for PNG*//*, blob);
-            byte[] bitmapdata = blob.toByteArray();
+            options.inSampleSize = calculateInSampleSize(options, 150, 150);
 
-
-
-            byte[] imageBytes = new byte[(int) f.length()];
-            ByteArrayInputStream imageStream = new ByteArrayInputStream(imageBytes);
-            Bitmap bitmap = BitmapFactory.decodeStream(imageStream);*/
+            options.inJustDecodeBounds = false;
+            bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + path, options);
 
             return bitmap;
+        }
+
+        public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            // Raw height and width of image
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > reqHeight || width > reqWidth) {
+
+                final int halfHeight = height / 2;
+                final int halfWidth = width / 2;
+
+                // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+                // height and width larger than the requested height and width.
+                while ((halfHeight / inSampleSize) > reqHeight
+                        && (halfWidth / inSampleSize) > reqWidth) {
+                    inSampleSize *= 2;
+                }
+            }
+
+            return inSampleSize;
         }
     }
 }

@@ -1,9 +1,18 @@
 package com.elitetek.scrambleme;
 
+import com.elitetek.scrambleme.database.DataManager;
+
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.parse.ParseUser;
+
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,16 +24,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.elitetek.scrambleme.database.DataManager;
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.parse.ParseUser;
-
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 public class MainActivity extends Activity implements MainFragment.OnFragmentInteractionListener,
 													  FooterFragment.OnFragmentInteractionListener,
@@ -32,6 +40,8 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
 
 	String pathToPhoto;
     DataManager dataManager;
+    public static ArrayList<ImagePairs> picturesList;
+    public static int[] KEY;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +50,13 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
 		dataManager = new DataManager(this);
 
 		getFragmentManager().beginTransaction()
-        		.add(R.id.container, new MainFragment(), "main")
+        	.add(R.id.container, new MainFragment(), "main")
     		.add(R.id.footer, new FooterFragment(), "footer")
     		.commit();
 
 		setupActionBar();
+
+        generateKey();
 	}
 
     public void graphRequest() {
@@ -87,6 +99,8 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
         View mCustomView = mInflater.inflate(R.layout.custum_action_bar, null);
         TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.textViewActionBarTitle);
         mTitleTextView.setText("Scrambles");
+        mTitleTextView.setTextSize(getResources().getDimension(R.dimen.action_bar_text_size));
+        mTitleTextView.setPadding(5,10,5,5);
         mTitleTextView.setTypeface(titleFont);
 
         mActionBar.setCustomView(mCustomView);
@@ -128,22 +142,45 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
             else
                 Toast.makeText(this, "Choose an image to save first", Toast.LENGTH_SHORT).show();
         }
+        else if (id == R.id.delete) {
+            if (scramFrag != null)
+                scramFrag.handleMenuPress(id);
+            else
+                Toast.makeText(this, "Choose an image to delete first", Toast.LENGTH_SHORT).show();
+        }
 		
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	public void fromMainFragment() {
-		// code to run from MainFragment
-	}
+
 
 	/**
 	 * Prevent back button from leaving the app
 	 */
 	@Override
-	public void onBackPressed() { Log.d("click", "in main back pressed"); }
+	public void onBackPressed() {
 
-	@Override
+        MainFragment main = (MainFragment) getFragmentManager().findFragmentByTag("main");
+
+        if (main == null) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, new MainFragment(), "main")
+                    .add(R.id.footer, new FooterFragment(), "footer")
+                    .commit();
+        }
+    }
+
+    @Override
+    public void fromMainFragment(int id, String imagePath) {
+        // code to run from MainFragment
+//        getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("footer")).commit();
+//        getFragmentManager().beginTransaction().replace(R.id.container, new ScrambleFragment(normal, scrambled), "scramble").commit();
+        getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("footer")).commit();
+        getFragmentManager().beginTransaction().replace(R.id.container, new ScrambleFragment(id, imagePath), "scramble").commit();
+
+    }
+
+    @Override
 	public void fromFooterFragment(String path) {
 		// code to run from FooterFragment
 		/*
@@ -172,5 +209,50 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
         imagePairs.setNormalImage(normal);
         imagePairs.setScrambledImage(scrambled);
         dataManager.saveImagePair(imagePairs);
+    }
+
+    @Override
+    public void fromScramFragDeleteFromDatabase(int id) {
+        dataManager.removeImagePair(id);
+    }
+
+    public void generateKey() {
+
+        AssetManager assetManager = getResources().getAssets();
+        InputStream is = null;
+        BufferedReader reader;
+        String line;
+
+        try {
+            is = assetManager.open("key.txt");
+            reader = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+
+            if (is != null) {
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+            }
+            createIntArrayForKey(sb.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createIntArrayForKey(String stringFromFile) {
+
+        String[] allStrings = stringFromFile.split( "\\s" );
+        int[] intArray = new int[allStrings.length];
+        for( int i = 0; i < allStrings.length; ++i ){
+            try{
+                intArray[i] = Integer.parseInt( allStrings[i] );
+            }catch( NumberFormatException e ){
+                // Do whatever you think is appropriated
+                Log.d("key", "number format exception ");
+                intArray[i] = -1;
+            }
+        }
+        KEY = intArray;
     }
 }

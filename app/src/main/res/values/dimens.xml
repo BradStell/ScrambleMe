@@ -7,5 +7,6 @@
     <dimen name="main_title_text_size">15dp</dimen>
     <dimen name="button_text_size">7dp</dimen>
     <dimen name="button_text_size_small">5dp</dimen>
+    <dimen name="action_bar_text_size">12dp</dimen>
 
 </resources>

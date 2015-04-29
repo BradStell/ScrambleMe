@@ -29,6 +29,7 @@
     <declare-styleable name="com_facebook_profile_picture_view"><attr name="preset_size"><enum name="small" value="-2"/><enum name="normal" value="-3"/><enum name="large" value="-4"/></attr><attr format="boolean" name="is_cropped"/></declare-styleable>
     <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
+    <dimen name="action_bar_text_size">12dp</dimen>
     <dimen name="activity_horizontal_margin">3dp</dimen>
     <dimen name="activity_vertical_margin">3dp</dimen>
     <dimen name="button_text_size">7dp</dimen>
@@ -97,6 +98,7 @@
     <string name="hint_email">Email</string>
     <string name="hint_name">Name</string>
     <string name="hint_password">Password</string>
+    <string name="menu_delete">Delete</string>
     <string name="menu_logout">Logout</string>
     <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
     <eat-comment/>

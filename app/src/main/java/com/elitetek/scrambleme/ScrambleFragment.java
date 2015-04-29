@@ -4,12 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Random;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +16,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +26,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.elitetek.scrambleme.database.ImageDAO;
+import com.parse.ParseUser;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment
@@ -48,9 +50,14 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
     int[] used;
     int[] key;
 	private int COUNT = 0;
+    private int SAVE_COUNT = 0;
 	private static final int FROM_SHARE = 13;
     Bitmap normalPictureToBeSaved = null;
     Bitmap scrambledPictureToBeSaved = null;
+    Bitmap normalPictureFromListView;
+    Bitmap scrambledPictureFromListView;
+    int picturePairFromListViewId = -1;
+    String imagePath = null;
 
     public ScrambleFragment() {
         // Required empty public constructor
@@ -60,6 +67,11 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 		// Required empty public constructor
 		pathToFile = path;
 	}
+
+    public ScrambleFragment(int id, String imagePath) {
+        picturePairFromListViewId = id;
+        this.imagePath = imagePath;
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,8 +100,22 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
         DeScrambleMe.setTextSize(getResources().getDimension(R.dimen.button_text_size));
 		/***** END  UI SETUP *************************************************************************************/
 			
-		
-		img = setPic(pathToFile);
+        if (picturePairFromListViewId < 0)
+		    img = setPic(pathToFile);
+        else{
+            Log.d("path", imagePath);
+            img = setScaledPic(imagePath);
+            pictureToScramble.setImageBitmap(img);
+        }
+
+
+        /*if (imagePath != null) {
+
+            Bitmap pic = setScaledPic(imagePath);
+
+
+            pictureToScramble.setImageBitmap(pic);
+        }*/
 
         // Back button pressed
 		ScrambleFragment fragment = this;
@@ -99,6 +125,7 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 			public boolean onKey(View arg0, int keyCode, KeyEvent arg2) {
 				if( keyCode == KeyEvent.KEYCODE_BACK ) {
 		            mListener.fromScrambleFragment();
+                    Log.d("click", "in scramble fragment back pressed");
 		        }
 		        return true;
 			}
@@ -126,25 +153,52 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 		
 		switch (v.getId()) {
 			case R.id.buttonScramble:
-                if (COUNT++ < 1)
-                    scrambleImage(img);
+
+                if (COUNT++ < 1) {
+                    if (img != null)
+                        scrambleImage(img);
+                    else
+                        Toast.makeText(getActivity(), "Picture is already scrambled", Toast.LENGTH_SHORT).show();
+                }
 
                 break;
+
             case R.id.buttonDescramble:
 
                 if (scrambledImageArray != null) {
                     Bitmap[] descrambledArray = new Bitmap[scrambledImageArray.length];
 
                     for (int i = 0; i < scrambledImageArray.length; i++)
-                        descrambledArray[key[i]] = scrambledImageArray[i];
+                        descrambledArray[MainActivity.KEY[i]] = scrambledImageArray[i];
 
                     Bitmap scaled = putBitmapsTogether(descrambledArray, pictureBeingViewed);
                     pictureBeingViewed = scaled;
                     pictureToScramble.setImageBitmap(scaled);
                     COUNT--;
-                } else {
+                } else if (imagePath != null){
+
+                    Bitmap[] imageIntoArray = getBitmapArray(img);
+                    //Bitmap pppp = putBitmapsTogether(imageIntoArray, scrambledPictureFromListView);
+                    //pictureToScramble.setImageBitmap(pppp);
+                    Bitmap[] descrambledArray = new Bitmap[imageIntoArray.length];
+
+                    for (int i = 0; i < imageIntoArray.length; i++)
+                        descrambledArray[MainActivity.KEY[i]] = imageIntoArray[i];
+
+                    Bitmap scaled = putBitmapsTogether(descrambledArray, img);
+                    pictureBeingViewed = scaled;
+
+                    /*LinearLayout imageRoot = (LinearLayout) getActivity().findViewById(R.id.linearLayoutScramHolder);
+                    imageRoot.removeView(pictureToScramble);
+                    ImageView newImageHolder = new ImageView(getActivity());
+                    newImageHolder.setImageBitmap(scaled);
+
+                    imageRoot.addView(newImageHolder);*/
+
+                    pictureToScramble.setImageBitmap(scaled);
+                    COUNT--;
+                } else
                     Toast.makeText(getActivity(), "Picture is not scrambled", Toast.LENGTH_SHORT).show();
-                }
         }
 	}
 
@@ -174,10 +228,36 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
                 if (scrambledPictureToBeSaved == null) {
                     Toast.makeText(getActivity(), "You must scramble the image first", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (SAVE_COUNT > 0)
+                    Toast.makeText(getActivity(), "The image is already saved", Toast.LENGTH_SHORT).show();
+                else {
                     Toast.makeText(getActivity(), "Pictures saved", Toast.LENGTH_SHORT).show();
                     // TODO code to save to database
+                    SAVE_COUNT++;
+                    ImagePairs newImagePair = new ImagePairs();
+                    newImagePair.setOwnerName(ParseUser.getCurrentUser().getString("username"));
+                    newImagePair.setNormalImage(normalPictureToBeSaved);
+                    newImagePair.setScrambledImage(scrambledPictureToBeSaved);
+                    MainActivity.picturesList.add(newImagePair);
+
+                    normalPictureFromListView = normalPictureToBeSaved;
+                    scrambledPictureFromListView = scrambledPictureToBeSaved;
+
                     mListener.fromScramFragSaveToDatabase(normalPictureToBeSaved, scrambledPictureToBeSaved);
+                }
+
+                break;
+
+            case R.id.delete: /*********************************************************************************************/
+
+                if (picturePairFromListViewId < 0)
+                    Toast.makeText(getActivity(), "Images are not saved", Toast.LENGTH_SHORT).show();
+                else {
+
+                   // MainFragment mainFragment = (MainFragment) getFragmentManager().findFragmentByTag("main");
+                   // mainFragment.removeItemFromArrayLists(picturePairFromListViewId);
+
+                    mListener.fromScramFragDeleteFromDatabase(picturePairFromListViewId);
                 }
         }
 
@@ -221,11 +301,14 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
         int chunkWidth = image.getWidth() / cols;
         int chunkHeight = image.getHeight() / rows;
 
+        Log.d("size", image.getWidth() + " divide: " + (float)image.getWidth() / cols);
+
         int count = 0;
         Bitmap[] imgs = new Bitmap[rows * cols];
         for (int x = 0; x < rows; x++) {
             for (int y = 0; y < cols; y++) {
                 imgs[count] = Bitmap.createBitmap(image, x * chunkWidth, y * chunkHeight, chunkWidth, chunkHeight);
+
                 count++;
             }
         }
@@ -241,21 +324,15 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
         Bitmap[] imgs = getBitmapArray(image);
 
-        Random rand = new Random(System.nanoTime());
-        used = new int [imgs.length];
-        key = new int[imgs.length];
         Bitmap[] scrambledArray = new Bitmap[imgs.length];
+
+        Random rand = new Random(System.nanoTime());
+        int[] used = new int [25];
+        int[] key = new int[25];
         int number;
 
-        // Scramble Array and generate key for unscrambling
-        for (int i = 0; i < imgs.length; i++) {
-            number = rand.nextInt(imgs.length);
-            while (used[number] == 1)
-                number = rand.nextInt(imgs.length);
-            key[i] = number;
-            used[number] = 1;
-            scrambledArray[i] = imgs[number];
-        }
+        for (int i = 0; i < MainActivity.KEY.length; i++)
+            scrambledArray[i] = imgs[MainActivity.KEY[i]];
 
         scrambledImageArray = scrambledArray;
 
@@ -266,40 +343,80 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 		pictureToScramble.setImageBitmap(scaled);
 	}
 
+    public Bitmap setScaledPic(String path) {
+
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + path, bmOptions);
+
+        bmOptions.inSampleSize = calculateInSampleSize(bmOptions, 400, 400);
+
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + path, bmOptions);
+
+        int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+
+        normalPictureToBeSaved = bitmap;
+        pictureToScramble.setImageBitmap(scaled);
+        pictureBeingViewed = bitmap;
+        return bitmap;
+    }
+
     /**
      *
      * @param mCurrentPhotoPath
      * @return
      */
 	private Bitmap setPic(String mCurrentPhotoPath) {
-		int targetW = pictureToScramble.getWidth();
-		int targetH = pictureToScramble.getHeight();
 
 		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
 		bmOptions.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-		int photoW = bmOptions.outWidth;
-		int photoH = bmOptions.outHeight;
 
-		int scaleFactor = 1;
-		if ((targetW > 0) || (targetH > 0)) {
-			scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-		}
+        bmOptions.inSampleSize = calculateInSampleSize(bmOptions, 400, 400);
 
 		bmOptions.inJustDecodeBounds = false;
-		bmOptions.inSampleSize = scaleFactor;
 		bmOptions.inPurgeable = true;
 
 		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 
+        int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+
         normalPictureToBeSaved = bitmap;
-		pictureToScramble.setImageBitmap(bitmap);
+		pictureToScramble.setImageBitmap(scaled);
         pictureBeingViewed = bitmap;
 		return bitmap;
 	}
 
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
     public interface OnFragmentInteractionListener {
         public void fromScrambleFragment();
         public void fromScramFragSaveToDatabase(Bitmap normal, Bitmap scrambled);
+        public void fromScramFragDeleteFromDatabase(int id);
     }
 }

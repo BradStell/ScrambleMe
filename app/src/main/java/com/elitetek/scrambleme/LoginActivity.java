@@ -1,6 +1,5 @@
 package com.elitetek.scrambleme;
 
-
 import com.facebook.AccessToken;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -36,7 +35,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
-		/* UI element setup ****************************************************************************************/
+		/** UI element setup ****************************************************************************************/
 		login = (Button) findViewById(R.id.buttonLogin);
 		login.setOnClickListener(this);
 		create = (Button) findViewById(R.id.buttonCreateAccount);
@@ -73,29 +72,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 		title.setTypeface(titleFont);
 		title.setTextSize(getResources().getDimension(R.dimen.title_text_size));
+        /** END UI element setup ****************************************************************************************/
 
-		/** ACTION BAR  ***********************************
-		ActionBar mActionBar = getActionBar();
-		mActionBar.setDisplayShowHomeEnabled(false);
-		mActionBar.setDisplayShowTitleEnabled(false);
-		LayoutInflater mInflater = LayoutInflater.from(this);
-
-		View mCustomView = mInflater.inflate(R.layout.custum_action_bar, null);
-		TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.textViewActionBarTitle);
-		mTitleTextView.setText("Scramble Me");
-		mTitleTextView.setTypeface(titleFont);
-
-		mActionBar.setCustomView(mCustomView);
-		mActionBar.setDisplayShowCustomEnabled(true);
-		/****   /UI element setup ********************************************************************************************/
-
-		
-		
-		
 		// Check to see if the user is already logged in
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null&& ParseFacebookUtils.isLinked(currentUser)){
-            // go to main activity
+        if (currentUser != null){
             Toast.makeText(LoginActivity.this, "Welcome " + currentUser.getString("nameWithCase"), Toast.LENGTH_LONG).show();
             startMainActivity();
         }
@@ -135,11 +116,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 }
 
                 break;
+
             case R.id.buttonCreateAccount:
+
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(intent);
                 break;
+
             case R.id.buttonFbLogin:
+
                 List<String> permissions = Arrays.asList("public_profile", "email","read_custom_friendlists","user_photos");
 
                 ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this, permissions, new LogInCallback() {
@@ -169,8 +154,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 });
 
                 break;
-            case R.id.buttonTweetLogin:
 
+            case R.id.buttonTweetLogin:
+                Toast.makeText(this, "Will be implemented in version 2", Toast.LENGTH_SHORT).show();
                 break;
         }
 

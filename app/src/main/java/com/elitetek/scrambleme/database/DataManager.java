@@ -1,11 +1,8 @@
-// James Stell
-
 package com.elitetek.scrambleme.database;
+import com.elitetek.scrambleme.ImagePairs;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-
-import com.elitetek.scrambleme.ImagePairs;
 
 import java.util.ArrayList;
 
@@ -31,9 +28,17 @@ public class DataManager {
         imageDAO.save(imagePairs);
     }
 
-	public void removeImagePair(ImagePairs imagePairs) {
-		imageDAO.delete(imagePairs);
+	public void removeImagePair(int id) {
+		imageDAO.delete(id);
 	}
+
+    public ImagePairs getImagePair(int id) {
+        return imageDAO.get(id);
+    }
+
+    public String getScrambledImagePath(int id) {
+        return imageDAO.getScrambledImagePath(id);
+    }
 
     public ArrayList<ImagePairs> getAllSavedImages() {
         return imageDAO.getAllSavedImages();

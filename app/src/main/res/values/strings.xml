@@ -28,11 +28,12 @@
     <string name="send_to">Send To..</string>
     <string name="button_scramble">Sramble Pic</string>
     <string name="button_descramble">Descramble Pic</string>
-    <string name="action_search">Share</string>
-    <string name="action_save">Save</string>
 
     <!-- Menu -->
     <string name="menu_logout">Logout</string>
+    <string name="menu_delete">Delete</string>
+    <string name="action_search">Share</string>
+    <string name="action_save">Save</string>
 
 
 </resources>

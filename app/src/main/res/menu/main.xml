@@ -3,6 +3,10 @@
     tools:context="com.elitetek.scrambleme.MainActivity" >
 
     <item
+        android:id="@+id/delete"
+        android:title="@string/menu_delete"/>
+
+    <item
         android:id="@+id/logout"
         android:title="@string/menu_logout"/>
 

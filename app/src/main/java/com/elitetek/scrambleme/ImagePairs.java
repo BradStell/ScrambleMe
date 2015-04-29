@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import java.util.Random;
 
 /**
+ * The pair of images, both normal and scrambled
  * Created by B-rad on 4/26/2015.
  */
 public class ImagePairs {
@@ -15,7 +16,7 @@ public class ImagePairs {
 
     public ImagePairs () {
         Random rand = new Random(System.nanoTime());
-        id = rand.nextInt();
+        id = rand.nextInt(Integer.MAX_VALUE);
     }
 
     public String getOwnerName() {
