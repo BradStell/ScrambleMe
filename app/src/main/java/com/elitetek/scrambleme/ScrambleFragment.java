@@ -47,8 +47,6 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
     Bitmap[] scrambledImageArray;
 	String pathToFile;
 	LinearLayout root;
-    int[] used;
-    int[] key;
 	private int COUNT = 0;
     private int SAVE_COUNT = 0;
 	private static final int FROM_SHARE = 13;
@@ -107,15 +105,6 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
             img = setScaledPic(imagePath);
             pictureToScramble.setImageBitmap(img);
         }
-
-
-        /*if (imagePath != null) {
-
-            Bitmap pic = setScaledPic(imagePath);
-
-
-            pictureToScramble.setImageBitmap(pic);
-        }*/
 
         // Back button pressed
 		ScrambleFragment fragment = this;
@@ -178,8 +167,6 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
                 } else if (imagePath != null){
 
                     Bitmap[] imageIntoArray = getBitmapArray(img);
-                    //Bitmap pppp = putBitmapsTogether(imageIntoArray, scrambledPictureFromListView);
-                    //pictureToScramble.setImageBitmap(pppp);
                     Bitmap[] descrambledArray = new Bitmap[imageIntoArray.length];
 
                     for (int i = 0; i < imageIntoArray.length; i++)
@@ -187,14 +174,6 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
                     Bitmap scaled = putBitmapsTogether(descrambledArray, img);
                     pictureBeingViewed = scaled;
-
-                    /*LinearLayout imageRoot = (LinearLayout) getActivity().findViewById(R.id.linearLayoutScramHolder);
-                    imageRoot.removeView(pictureToScramble);
-                    ImageView newImageHolder = new ImageView(getActivity());
-                    newImageHolder.setImageBitmap(scaled);
-
-                    imageRoot.addView(newImageHolder);*/
-
                     pictureToScramble.setImageBitmap(scaled);
                     COUNT--;
                 } else
@@ -211,7 +190,7 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
                 share.setType("image/jpeg");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 pictureBeingViewed.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
+                File f = new File(MainActivity.PICTURE_PATH + "temporary_file.jpg");
                 try {
                     f.createNewFile();
                     FileOutputStream fo = new FileOutputStream(f);
@@ -352,14 +331,14 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + path, bmOptions);
+        BitmapFactory.decodeFile(MainActivity.PICTURE_PATH + path, bmOptions);
 
         bmOptions.inSampleSize = calculateInSampleSize(bmOptions, 400, 400);
 
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inPurgeable = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + path, bmOptions);
+        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.PICTURE_PATH + path, bmOptions);
 
         int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
         Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);

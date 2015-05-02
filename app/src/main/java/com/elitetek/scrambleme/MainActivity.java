@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,12 +45,15 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
     DataManager dataManager;
     public static ArrayList<ImagePairs> picturesList;
     public static int[] KEY;
+    public static final String PICTURE_PATH = Environment.getExternalStorageDirectory() + File.separator + "ScrambleMe" + File.separator;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		dataManager = new DataManager(this);
+
+        createImageDirectory();
 
 		getFragmentManager().beginTransaction()
         	.add(R.id.container, new MainFragment(), "main")
@@ -59,6 +64,17 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
 
         generateKey();
 	}
+
+    public void createImageDirectory() {
+        String folder_main = "ScrambleMe";
+
+        File file = new File(Environment.getExternalStorageDirectory(), folder_main);
+
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+    }
 
     public void graphRequest() {
         GraphRequest request = GraphRequest.newMeRequest(
@@ -218,6 +234,10 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
     @Override
     public void fromScramFragDeleteFromDatabase(int id) {
         dataManager.removeImagePair(id);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new MainFragment(), "main")
+                .add(R.id.footer, new FooterFragment(), "footer")
+                .commit();
     }
 
     public void generateKey() {

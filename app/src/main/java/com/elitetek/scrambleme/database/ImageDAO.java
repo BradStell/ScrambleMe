@@ -1,6 +1,7 @@
 package com.elitetek.scrambleme.database;
 import com.elitetek.scrambleme.ImagePairs;
 
+import com.elitetek.scrambleme.MainActivity;
 import com.parse.ParseUser;
 
 import android.content.ContentValues;
@@ -159,7 +160,7 @@ public class ImageDAO {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
             String relativePicturePath = "picture_" + System.nanoTime() + ".jpg";
-            File f = new File(Environment.getExternalStorageDirectory() + File.separator + relativePicturePath);
+            File f = new File(MainActivity.PICTURE_PATH + relativePicturePath);
 
             try {
                 f.createNewFile();
@@ -177,7 +178,7 @@ public class ImageDAO {
 
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + path, options);
+            Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.PICTURE_PATH + path, options);
             int imageHeight = options.outHeight;
             int imageWidth = options.outWidth;
             String imageType = options.outMimeType;
@@ -185,7 +186,7 @@ public class ImageDAO {
             options.inSampleSize = calculateInSampleSize(options, 150, 150);
 
             options.inJustDecodeBounds = false;
-            bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + path, options);
+            bitmap = BitmapFactory.decodeFile(MainActivity.PICTURE_PATH + path, options);
 
             return bitmap;
         }

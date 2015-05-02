@@ -23,6 +23,6 @@
     <item android:id="@+id/fbshare"
         android:icon="@drawable/facebook_small"
         android:title="@string/action_search"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="always" />
 </menu>
-<!-- From: file:/D:/new/app/src/main/res/menu/main.xml -->
+<!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/ScrambleMe/app/src/main/res/menu/main.xml -->

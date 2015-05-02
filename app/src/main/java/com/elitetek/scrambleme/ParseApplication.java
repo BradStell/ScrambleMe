@@ -37,7 +37,7 @@ public class ParseApplication extends Application {
     public void printHashKey() {
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
-                    "social.integrate.test.integratesocial",
+                    "com.elitetek.scrambleme",
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
