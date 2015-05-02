@@ -103,8 +103,9 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
         if (picturePairFromListViewId < 0)
             img = setPic(pathToFile);
-        else {
-            Log.d("path", imagePath);
+        else if (pathToFile != null) {
+            img = setPic(pathToFile);
+        } else {
             img = setScaledPic(imagePath);
             pictureToScramble.setImageBitmap(img);
         }
@@ -167,7 +168,7 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
                     pictureBeingViewed = scaled;
                     pictureToScramble.setImageBitmap(scaled);
                     COUNT--;
-                } else if (imagePath != null) {
+                } else {
 
                     Bitmap[] imageIntoArray = getBitmapArray(img);
                     Bitmap[] descrambledArray = new Bitmap[imageIntoArray.length];
@@ -177,10 +178,10 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
                     Bitmap scaled = putBitmapsTogether(descrambledArray, img);
                     pictureBeingViewed = scaled;
+                    scrambledPictureToBeSaved = scaled;
                     pictureToScramble.setImageBitmap(scaled);
                     COUNT--;
-                } else
-                    Toast.makeText(getActivity(), "Picture is not scrambled", Toast.LENGTH_SHORT).show();
+                }
         }
     }
 
@@ -208,9 +209,7 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
             case R.id.save: /***********************************************************************************************/
 
-                if (scrambledPictureToBeSaved == null) {
-                    Toast.makeText(getActivity(), "You must scramble the image first", Toast.LENGTH_SHORT).show();
-                } else if (SAVE_COUNT > 0)
+                if (SAVE_COUNT > 0)
                     Toast.makeText(getActivity(), "The image is already saved", Toast.LENGTH_SHORT).show();
                 else {
                     Toast.makeText(getActivity(), "Pictures saved", Toast.LENGTH_SHORT).show();

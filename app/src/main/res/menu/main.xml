@@ -17,11 +17,11 @@
 
     <item android:id="@+id/share"
         android:icon="@drawable/social_send_now"
-        android:title="@string/action_search"
-        android:showAsAction="always" />
+        android:title="@string/action_share"
+        android:showAsAction="ifRoom" />
 
     <item android:id="@+id/fbshare"
         android:icon="@drawable/facebook_small"
-        android:title="@string/action_search"
+        android:title="@string/action_facebook_share"
         android:showAsAction="always" />
 </menu>

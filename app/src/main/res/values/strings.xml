@@ -32,7 +32,8 @@
     <!-- Menu -->
     <string name="menu_logout">Logout</string>
     <string name="menu_delete">Delete</string>
-    <string name="action_search">Share</string>
+    <string name="action_share">Share</string>
+    <string name="action_facebook_share">Share with facebook</string>
     <string name="action_save">Save</string>
 
 
