@@ -96,6 +96,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     private void startMainActivity() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        finish();
         startActivity(intent);
     }
 
