@@ -198,27 +198,28 @@ containing a value of this type.
         public static final int gradient_footer=0x7f02001b;
         public static final int gradient_image_background=0x7f02001c;
         public static final int ic_launcher=0x7f02001d;
-        public static final int me=0x7f02001e;
-        public static final int messenger_bubble_large_blue=0x7f02001f;
-        public static final int messenger_bubble_large_white=0x7f020020;
-        public static final int messenger_bubble_small_blue=0x7f020021;
-        public static final int messenger_bubble_small_white=0x7f020022;
-        public static final int messenger_button_blue_bg_round=0x7f020023;
-        public static final int messenger_button_blue_bg_selector=0x7f020024;
-        public static final int messenger_button_send_round_shadow=0x7f020025;
-        public static final int messenger_button_white_bg_round=0x7f020026;
-        public static final int messenger_button_white_bg_selector=0x7f020027;
-        public static final int photo_icon=0x7f020028;
-        public static final int photo_icon_small=0x7f020029;
-        public static final int photo_smaller=0x7f02002a;
-        public static final int plant=0x7f02002b;
-        public static final int social_send_now=0x7f02002c;
-        public static final int twitter_small=0x7f02002d;
+        public static final int ic_stat_name=0x7f02001e;
+        public static final int me=0x7f02001f;
+        public static final int messenger_bubble_large_blue=0x7f020020;
+        public static final int messenger_bubble_large_white=0x7f020021;
+        public static final int messenger_bubble_small_blue=0x7f020022;
+        public static final int messenger_bubble_small_white=0x7f020023;
+        public static final int messenger_button_blue_bg_round=0x7f020024;
+        public static final int messenger_button_blue_bg_selector=0x7f020025;
+        public static final int messenger_button_send_round_shadow=0x7f020026;
+        public static final int messenger_button_white_bg_round=0x7f020027;
+        public static final int messenger_button_white_bg_selector=0x7f020028;
+        public static final int photo_icon=0x7f020029;
+        public static final int photo_icon_small=0x7f02002a;
+        public static final int photo_smaller=0x7f02002b;
+        public static final int plant=0x7f02002c;
+        public static final int social_send_now=0x7f02002d;
+        public static final int twitter_small=0x7f02002e;
     }
     public static final class id {
         public static final int LinearLayoutScrambleRoot=0x7f09000f;
         public static final int RelativeLayout1=0x7f090026;
-        public static final int action_settings=0x7f090035;
+        public static final int action_settings=0x7f090036;
         public static final int bottom=0x7f090006;
         public static final int box_count=0x7f090003;
         public static final int button=0x7f090004;
@@ -245,6 +246,7 @@ containing a value of this type.
         public static final int editTextPassConf=0x7f09001c;
         public static final int editTextPassCreate=0x7f09001b;
         public static final int editTextPasswordSignIn=0x7f090012;
+        public static final int fbshare=0x7f090035;
         public static final int footer=0x7f090018;
         public static final int imageViewNormal=0x7f09002d;
         public static final int imageViewPic=0x7f090029;
@@ -368,13 +370,14 @@ containing a value of this type.
         public static final int MessengerButtonText_White=0x7f07000d;
         public static final int MessengerButtonText_White_Large=0x7f07000e;
         public static final int MessengerButtonText_White_Small=0x7f07000f;
-        public static final int com_facebook_button=0x7f070010;
-        public static final int com_facebook_button_like=0x7f070011;
-        public static final int com_facebook_button_send=0x7f070012;
-        public static final int com_facebook_button_share=0x7f070013;
-        public static final int com_facebook_loginview_default_style=0x7f070014;
-        public static final int com_facebook_loginview_silver_style=0x7f070015;
-        public static final int tooltip_bubble_text=0x7f070016;
+        public static final int MyActionButtonStyle=0x7f070010;
+        public static final int com_facebook_button=0x7f070011;
+        public static final int com_facebook_button_like=0x7f070012;
+        public static final int com_facebook_button_send=0x7f070013;
+        public static final int com_facebook_button_share=0x7f070014;
+        public static final int com_facebook_loginview_default_style=0x7f070015;
+        public static final int com_facebook_loginview_silver_style=0x7f070016;
+        public static final int tooltip_bubble_text=0x7f070017;
     }
     public static final class styleable {
         /** Attributes that can be used with a com_facebook_like_view.

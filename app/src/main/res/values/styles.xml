@@ -15,6 +15,10 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style>
 
+    </style>
+    <style name="MyActionButtonStyle" parent="AppBaseTheme">
+        <item name="android:minWidth">32dip</item>
+        <item name="android:padding">0dip</item>
+    </style>
 </resources>

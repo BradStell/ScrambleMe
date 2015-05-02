@@ -259,6 +259,11 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
                     mListener.fromScramFragDeleteFromDatabase(picturePairFromListViewId);
                 }
+                break;
+
+            case R.id.fbshare:
+                Toast.makeText(getActivity().getBaseContext(),"FB Share clicked", Toast.LENGTH_LONG).show();
+                break;
         }
 
     }

@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -100,7 +101,7 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
         TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.textViewActionBarTitle);
         mTitleTextView.setText("Scrambles");
         mTitleTextView.setTextSize(getResources().getDimension(R.dimen.action_bar_text_size));
-        mTitleTextView.setPadding(5,10,5,5);
+        mTitleTextView.setPadding(5,5,5,5);
         mTitleTextView.setTypeface(titleFont);
 
         mActionBar.setCustomView(mCustomView);
@@ -110,7 +111,11 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+        MenuItem share = menu.findItem(R.id.fbshare);
+        if(AccessToken.getCurrentAccessToken() != null){
+            share.setVisible(false);
+        }
+        return true;
 	}
 
 	@Override
@@ -195,7 +200,6 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
 
 	@Override
 	public void fromScrambleFragment() {
-		// code to run from ScrambleFragment
 		getFragmentManager().beginTransaction()
 			.replace(R.id.container, new MainFragment(), "main")
 			.add(R.id.footer, new FooterFragment(), "footer")

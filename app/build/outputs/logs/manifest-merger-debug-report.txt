@@ -1,10 +1,6 @@
 -- Merging decision tree log ---
 manifest
 ADDED from AndroidManifest.xml:2:1
-	android:largeHeap
-		ADDED from AndroidManifest.xml:6:5
-	xmlns:android
-		ADDED from AndroidManifest.xml:2:11
 	package
 		ADDED from AndroidManifest.xml:3:5
 		INJECTED from AndroidManifest.xml:0:0
@@ -15,6 +11,10 @@ ADDED from AndroidManifest.xml:2:1
 		ADDED from AndroidManifest.xml:4:5
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
+	xmlns:android
+		ADDED from AndroidManifest.xml:2:11
+	android:largeHeap
+		ADDED from AndroidManifest.xml:6:5
 uses-sdk
 ADDED from AndroidManifest.xml:8:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
@@ -59,24 +59,24 @@ MERGED from com.android.support:support-v4:21.0.3:16:5
 		ADDED from AndroidManifest.xml:20:9
 	android:icon
 		ADDED from AndroidManifest.xml:21:9
-	android:theme
-		ADDED from AndroidManifest.xml:23:9
 	android:largeHeap
 		ADDED from AndroidManifest.xml:24:9
+	android:theme
+		ADDED from AndroidManifest.xml:23:9
 	android:name
 		ADDED from AndroidManifest.xml:19:9
 meta-data#com.parse.APPLICATION_ID
 ADDED from AndroidManifest.xml:25:9
-	android:name
-		ADDED from AndroidManifest.xml:26:13
 	android:value
 		ADDED from AndroidManifest.xml:27:13
+	android:name
+		ADDED from AndroidManifest.xml:26:13
 meta-data#com.parse.CLIENT_KEY
 ADDED from AndroidManifest.xml:28:9
-	android:name
-		ADDED from AndroidManifest.xml:29:13
 	android:value
 		ADDED from AndroidManifest.xml:30:13
+	android:name
+		ADDED from AndroidManifest.xml:29:13
 activity#com.elitetek.scrambleme.LoginActivity
 ADDED from AndroidManifest.xml:32:9
 	android:screenOrientation
@@ -131,7 +131,7 @@ ADDED from AndroidManifest.xml:56:9
 		ADDED from AndroidManifest.xml:57:13
 meta-data#com.facebook.sdk.ApplicationId
 ADDED from AndroidManifest.xml:62:9
-	android:name
-		ADDED from AndroidManifest.xml:63:13
 	android:value
 		ADDED from AndroidManifest.xml:64:13
+	android:name
+		ADDED from AndroidManifest.xml:63:13

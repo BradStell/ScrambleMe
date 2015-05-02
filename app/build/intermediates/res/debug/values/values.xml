@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/D:/new/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="background_color">#343434</color>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
+    <!-- From: file:/D:/new/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="com_facebook_blue">#3B5998</color>
     <color name="com_facebook_button_background_color">#415dae</color>
@@ -18,7 +18,7 @@
     <color name="com_facebook_likeboxcountview_text_color">#6a7180</color>
     <color name="com_facebook_likeview_text_color">#6a7180</color>
     <color name="com_facebook_share_button_text_color">#FFFFFF</color>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/D:/new/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="facebook_color">#3D59AB</color>
     <color name="secondary_background_color">#848484</color>
@@ -27,14 +27,14 @@
     <declare-styleable name="com_facebook_like_view"><attr format="color" name="foreground_color"/><attr format="string" name="object_id"/><attr name="object_type"><enum name="unknown" value="0"/><enum name="open_graph" value="1"/><enum name="page" value="2"/></attr><attr name="style"><enum name="standard" value="0"/><enum name="button" value="1"/><enum name="box_count" value="2"/></attr><attr name="auxiliary_view_position"><enum name="bottom" value="0"/><enum name="inline" value="1"/><enum name="top" value="2"/></attr><attr name="horizontal_alignment"><enum name="center" value="0"/><enum name="left" value="1"/><enum name="right" value="2"/></attr></declare-styleable>
     <declare-styleable name="com_facebook_login_view"><attr format="boolean" name="confirm_logout"/><attr format="string" name="login_text"/><attr format="string" name="logout_text"/></declare-styleable>
     <declare-styleable name="com_facebook_profile_picture_view"><attr name="preset_size"><enum name="small" value="-2"/><enum name="normal" value="-3"/><enum name="large" value="-4"/></attr><attr format="boolean" name="is_cropped"/></declare-styleable>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/values/dimens.xml -->
+    <!-- From: file:/D:/new/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="action_bar_text_size">12dp</dimen>
     <dimen name="activity_horizontal_margin">3dp</dimen>
     <dimen name="activity_vertical_margin">3dp</dimen>
     <dimen name="button_text_size">7dp</dimen>
     <dimen name="button_text_size_small">5dp</dimen>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
+    <!-- From: file:/D:/new/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="com_facebook_likeboxcountview_border_radius">3dp</dimen>
     <dimen name="com_facebook_likeboxcountview_border_width">1dp</dimen>
@@ -55,11 +55,11 @@
     <dimen name="com_facebook_share_button_padding_top">12dp</dimen>
     <dimen name="com_facebook_share_button_text_size">16.0sp</dimen>
     <dimen name="com_facebook_tooltip_horizontal_padding">10dp</dimen>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/values/dimens.xml -->
+    <!-- From: file:/D:/new/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="main_title_text_size">15dp</dimen>
     <dimen name="title_text_size">20dp</dimen>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/D:/new/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="action_save">Save</string>
     <string name="action_search">Share</string>
@@ -72,7 +72,7 @@
     <string name="button_login">Login</string>
     <string name="button_scramble">Sramble Pic</string>
     <string name="button_twitter">Log in with Twitter</string>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
+    <!-- From: file:/D:/new/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
     <eat-comment/>
     <string name="com_facebook_image_download_unknown_error">Unexpected error while downloading an image.</string>
     <string name="com_facebook_internet_permission_error_message">WebView login requires INTERNET permission</string>
@@ -90,7 +90,7 @@
     <string name="com_facebook_send_button_text">Send</string>
     <string name="com_facebook_share_button_text">Share</string>
     <string name="com_facebook_tooltip_default">New! You\'re in control - choose what info you want to share with apps.</string>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/D:/new/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="facebook_app_id">890466197677310</string>
     <string name="gallery_title">Scrambles</string>
@@ -100,10 +100,10 @@
     <string name="hint_password">Password</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_logout">Logout</string>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
+    <!-- From: file:/D:/new/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
     <eat-comment/>
     <string name="messenger_send_button_text">Send</string>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/D:/new/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="parse_app_id">5jH2cY9mSveUq96g4a7YRZF7i9XILuY9pd7sSKG9</string>
     <string name="parse_client_key">sI8KkWUCNrjWuU4H2MtJwAfNCRD3i9qMcZpCruKR</string>
@@ -114,7 +114,7 @@
     <string name="title_activity_signup">Sign Up</string>
     <string name="twitter_consumer_key">YOUR_TWITTER_CONSUMER_KEY</string>
     <string name="twitter_consumer_secret">YOUR_TWITTER_CONSUMER_SECRET</string>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/D:/new/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
@@ -125,8 +125,9 @@
     </style>
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+
     </style>
-    <!-- From: file:/C:/Users/B-rad/Documents/School/Spring_2015/Android/AndroidStudioProjects/Homework/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
+    <!-- From: file:/D:/new/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="MessengerButton">
     <item name="android:clickable">true</item>
@@ -186,6 +187,14 @@
     <style name="MessengerButtonText.White.Small">
     <item name="android:drawableLeft">@drawable/messenger_bubble_small_blue</item>
   </style>
+    <!-- From: file:/D:/new/app/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="MyActionButtonStyle" parent="AppBaseTheme">
+        <item name="android:minWidth">32dip</item>
+        <item name="android:padding">0dip</item>
+    </style>
+    <!-- From: file:/D:/new/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.0.0/res/values/values.xml -->
+    <eat-comment/>
     <style name="com_facebook_button" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/com_facebook_button_background</item>
         <item name="android:drawablePadding">6dp</item>
