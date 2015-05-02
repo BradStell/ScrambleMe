@@ -28,30 +28,33 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.elitetek.scrambleme.database.ImageDAO;
+import com.facebook.AccessToken;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.parse.ParseUser;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment
  * must implement the {@link ScrambleFragment.OnFragmentInteractionListener}
  * interface to handle interaction events.
- *
  */
 public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
-	private OnFragmentInteractionListener mListener;
-	Button scrambleMe;
+    private OnFragmentInteractionListener mListener;
+    Button scrambleMe;
     Button DeScrambleMe;
-	ImageView pictureToScramble;
-	Bitmap img;
-	Bitmap pictureBeingViewed;
+    ImageView pictureToScramble;
+    Bitmap img;
+    Bitmap pictureBeingViewed;
     Bitmap[] scrambledImageArray;
-	String pathToFile;
-	LinearLayout root;
+    String pathToFile;
+    LinearLayout root;
     int[] used;
     int[] key;
-	private int COUNT = 0;
+    private int COUNT = 0;
     private int SAVE_COUNT = 0;
-	private static final int FROM_SHARE = 13;
+    private static final int FROM_SHARE = 13;
     Bitmap normalPictureToBeSaved = null;
     Bitmap scrambledPictureToBeSaved = null;
     Bitmap normalPictureFromListView;
@@ -63,46 +66,46 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
-	public ScrambleFragment(String path) {
-		// Required empty public constructor
-		pathToFile = path;
-	}
+    public ScrambleFragment(String path) {
+        // Required empty public constructor
+        pathToFile = path;
+    }
 
     public ScrambleFragment(int id, String imagePath) {
         picturePairFromListViewId = id;
         this.imagePath = imagePath;
     }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_scramble, container, false);
-	}	
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		/***** UI SETUP ******************************************************************************************/
-		Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/CaviarDreams.ttf");
-		
-		root = (LinearLayout) getActivity().findViewById(R.id.LinearLayoutScrambleRoot);		
-		scrambleMe = (Button) getActivity().findViewById(R.id.buttonScramble);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_scramble, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        /***** UI SETUP ******************************************************************************************/
+        Typeface textFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/CaviarDreams.ttf");
+
+        root = (LinearLayout) getActivity().findViewById(R.id.LinearLayoutScrambleRoot);
+        scrambleMe = (Button) getActivity().findViewById(R.id.buttonScramble);
         DeScrambleMe = (Button) getActivity().findViewById(R.id.buttonDescramble);
-		pictureToScramble = (ImageView) getActivity().findViewById(R.id.imageViewPic);
-		
-		scrambleMe.setOnClickListener(this);
-		scrambleMe.setTypeface(textFont);
-		scrambleMe.setTextSize(getResources().getDimension(R.dimen.button_text_size));
+        pictureToScramble = (ImageView) getActivity().findViewById(R.id.imageViewPic);
+
+        scrambleMe.setOnClickListener(this);
+        scrambleMe.setTypeface(textFont);
+        scrambleMe.setTextSize(getResources().getDimension(R.dimen.button_text_size));
 
         DeScrambleMe.setOnClickListener(this);
         DeScrambleMe.setTypeface(textFont);
         DeScrambleMe.setTextSize(getResources().getDimension(R.dimen.button_text_size));
-		/***** END  UI SETUP *************************************************************************************/
-			
+        /***** END  UI SETUP *************************************************************************************/
+
         if (picturePairFromListViewId < 0)
-		    img = setPic(pathToFile);
-        else{
+            img = setPic(pathToFile);
+        else {
             Log.d("path", imagePath);
             img = setScaledPic(imagePath);
             pictureToScramble.setImageBitmap(img);
@@ -118,41 +121,41 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
         }*/
 
         // Back button pressed
-		ScrambleFragment fragment = this;
-		fragment.getView().setFocusableInTouchMode(true);
-		fragment.getView().setOnKeyListener( new OnKeyListener() { 
-			@Override
-			public boolean onKey(View arg0, int keyCode, KeyEvent arg2) {
-				if( keyCode == KeyEvent.KEYCODE_BACK ) {
-		            mListener.fromScrambleFragment();
+        ScrambleFragment fragment = this;
+        fragment.getView().setFocusableInTouchMode(true);
+        fragment.getView().setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View arg0, int keyCode, KeyEvent arg2) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    mListener.fromScrambleFragment();
                     Log.d("click", "in scramble fragment back pressed");
-		        }
-		        return true;
-			}
-		});
-	}
+                }
+                return true;
+            }
+        });
+    }
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			mListener = (OnFragmentInteractionListener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
-		}
-	}
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
+        }
+    }
 
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mListener = null;
-	}
-	
-	@Override
-	public void onClick(View v) {		
-		
-		switch (v.getId()) {
-			case R.id.buttonScramble:
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.buttonScramble:
 
                 if (COUNT++ < 1) {
                     if (img != null)
@@ -175,7 +178,7 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
                     pictureBeingViewed = scaled;
                     pictureToScramble.setImageBitmap(scaled);
                     COUNT--;
-                } else if (imagePath != null){
+                } else if (imagePath != null) {
 
                     Bitmap[] imageIntoArray = getBitmapArray(img);
                     //Bitmap pppp = putBitmapsTogether(imageIntoArray, scrambledPictureFromListView);
@@ -200,7 +203,7 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
                 } else
                     Toast.makeText(getActivity(), "Picture is not scrambled", Toast.LENGTH_SHORT).show();
         }
-	}
+    }
 
     public void handleMenuPress(int id) {
 
@@ -232,7 +235,6 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(), "The image is already saved", Toast.LENGTH_SHORT).show();
                 else {
                     Toast.makeText(getActivity(), "Pictures saved", Toast.LENGTH_SHORT).show();
-                    // TODO code to save to database
                     SAVE_COUNT++;
                     ImagePairs newImagePair = new ImagePairs();
                     newImagePair.setOwnerName(ParseUser.getCurrentUser().getString("username"));
@@ -254,27 +256,41 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(), "Images are not saved", Toast.LENGTH_SHORT).show();
                 else {
 
-                   // MainFragment mainFragment = (MainFragment) getFragmentManager().findFragmentByTag("main");
-                   // mainFragment.removeItemFromArrayLists(picturePairFromListViewId);
+                    // MainFragment mainFragment = (MainFragment) getFragmentManager().findFragmentByTag("main");
+                    // mainFragment.removeItemFromArrayLists(picturePairFromListViewId);
 
                     mListener.fromScramFragDeleteFromDatabase(picturePairFromListViewId);
                 }
                 break;
 
             case R.id.fbshare:
-                Toast.makeText(getActivity().getBaseContext(),"FB Share clicked", Toast.LENGTH_LONG).show();
+                //Bitmap image = null;
+                if (AccessToken.getCurrentAccessToken() != null) {
+                    if (ShareDialog.canShow(SharePhotoContent.class)) {
+                        SharePhoto photo = new SharePhoto.Builder()
+                                .setBitmap(scrambledPictureToBeSaved)
+                                .build();
+                        SharePhotoContent content = new SharePhotoContent.Builder()
+                                .addPhoto(photo)
+                                .build();
+                        ShareDialog.show(getActivity(), content);
+                    }
+                } else {
+                    Toast.makeText(getActivity().getBaseContext(), "You must be logged in through facebook inorder to share", Toast.LENGTH_LONG).show();
+                }
+
                 break;
         }
 
     }
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == FROM_SHARE)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FROM_SHARE)
             if (resultCode == Activity.RESULT_OK)
-			    mListener.fromScrambleFragment();
+                mListener.fromScrambleFragment();
 
-	}
+    }
 
     private Bitmap putBitmapsTogether(Bitmap[] bitmapArray, Bitmap image) {
 
@@ -288,12 +304,11 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
         int num = 0;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                canvas.drawBitmap(bitmapArray[num], chunkWidth * i,	chunkHeight * j, null);
+                canvas.drawBitmap(bitmapArray[num], chunkWidth * i, chunkHeight * j, null);
                 num++;
             }
         }
 
-        //Bitmap scaled = Bitmap.createScaledBitmap(bm, chunkWidth * rows, chunkHeight * cols, true);
         Bitmap scaled = Bitmap.createBitmap(bm);
 
         return scaled;
@@ -306,7 +321,7 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
         int chunkWidth = image.getWidth() / cols;
         int chunkHeight = image.getHeight() / rows;
 
-        Log.d("size", image.getWidth() + " divide: " + (float)image.getWidth() / cols);
+        Log.d("size", image.getWidth() + " divide: " + (float) image.getWidth() / cols);
 
         int count = 0;
         Bitmap[] imgs = new Bitmap[rows * cols];
@@ -322,17 +337,16 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     *
      * @param image
      */
-	private void scrambleImage(Bitmap image) {
+    private void scrambleImage(Bitmap image) {
 
         Bitmap[] imgs = getBitmapArray(image);
 
         Bitmap[] scrambledArray = new Bitmap[imgs.length];
 
         Random rand = new Random(System.nanoTime());
-        int[] used = new int [25];
+        int[] used = new int[25];
         int[] key = new int[25];
         int number;
 
@@ -342,11 +356,11 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
         scrambledImageArray = scrambledArray;
 
         // Assemble scrambled bitmap array back into single bitmap
-		Bitmap scaled = putBitmapsTogether(scrambledArray, image);
+        Bitmap scaled = putBitmapsTogether(scrambledArray, image);
         scrambledPictureToBeSaved = scaled;
-		pictureBeingViewed = scaled;
-		pictureToScramble.setImageBitmap(scaled);
-	}
+        pictureBeingViewed = scaled;
+        pictureToScramble.setImageBitmap(scaled);
+    }
 
     public Bitmap setScaledPic(String path) {
 
@@ -361,7 +375,7 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
         Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + path, bmOptions);
 
-        int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+        int nh = (int) (bitmap.getHeight() * (512.0 / bitmap.getWidth()));
         Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
 
         normalPictureToBeSaved = bitmap;
@@ -371,31 +385,30 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     *
      * @param mCurrentPhotoPath
      * @return
      */
-	private Bitmap setPic(String mCurrentPhotoPath) {
+    private Bitmap setPic(String mCurrentPhotoPath) {
 
-		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-		bmOptions.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 
         bmOptions.inSampleSize = calculateInSampleSize(bmOptions, 400, 400);
 
-		bmOptions.inJustDecodeBounds = false;
-		bmOptions.inPurgeable = true;
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inPurgeable = true;
 
-		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 
-        int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+        int nh = (int) (bitmap.getHeight() * (512.0 / bitmap.getWidth()));
         Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
 
         normalPictureToBeSaved = bitmap;
-		pictureToScramble.setImageBitmap(scaled);
+        pictureToScramble.setImageBitmap(scaled);
         pictureBeingViewed = bitmap;
-		return bitmap;
-	}
+        return bitmap;
+    }
 
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
@@ -421,7 +434,9 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
     public interface OnFragmentInteractionListener {
         public void fromScrambleFragment();
+
         public void fromScramFragSaveToDatabase(Bitmap normal, Bitmap scrambled);
+
         public void fromScramFragDeleteFromDatabase(int id);
     }
 }

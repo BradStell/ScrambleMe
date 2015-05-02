@@ -24,12 +24,12 @@ public class ParseApplication extends Application {
       printHashKey();
         // Add your initialization code here
         Parse.initialize(this, "5jH2cY9mSveUq96g4a7YRZF7i9XILuY9pd7sSKG9", "sI8KkWUCNrjWuU4H2MtJwAfNCRD3i9qMcZpCruKR");
-
+        ParseTwitterUtils.initialize("FPEfH4Aq0FqrAljaYKFhsckFd", "13XrsthkgsmeeSytLmYTDqBvo1SMhqvCy5Bmq5dS1jKpcNxI2U");
         ParseFacebookUtils.initialize(getApplicationContext());
         FacebookSdk.sdkInitialize(getApplicationContext());
-      ParseTwitterUtils.initialize("FPEfH4Aq0FqrAljaYKFhsckFd", "13XrsthkgsmeeSytLmYTDqBvo1SMhqvCy5Bmq5dS1jKpcNxI2U");
 
-      ParseACL defaultACL = new ParseACL();
+
+        ParseACL defaultACL = new ParseACL();
         ParseACL.setDefaultACL(defaultACL, true);
   }
 
@@ -37,7 +37,7 @@ public class ParseApplication extends Application {
     public void printHashKey() {
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
-                    "social.integrate.test.integratesocial",
+                    "com.elitetek.scrambleme",
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
