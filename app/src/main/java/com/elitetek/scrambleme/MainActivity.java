@@ -128,7 +128,7 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
         MenuItem share = menu.findItem(R.id.fbshare);
-        if(AccessToken.getCurrentAccessToken() != null){
+        if(AccessToken.getCurrentAccessToken() == null){
             share.setVisible(false);
         }
         return true;
@@ -168,6 +168,12 @@ public class MainActivity extends Activity implements MainFragment.OnFragmentInt
                 scramFrag.handleMenuPress(id);
             else
                 Toast.makeText(this, "Choose an image to delete first", Toast.LENGTH_SHORT).show();
+        }
+        else if (id == R.id.fbshare){
+            if (scramFrag != null)
+                scramFrag.handleMenuPress(id);
+            else
+                Toast.makeText(this, "Choose an image to share first", Toast.LENGTH_SHORT).show();
         }
 		
 		return super.onOptionsItemSelected(item);
