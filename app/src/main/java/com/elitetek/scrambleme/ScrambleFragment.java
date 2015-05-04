@@ -212,18 +212,23 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
                 if (SAVE_COUNT > 0)
                     Toast.makeText(getActivity(), "The image is already saved", Toast.LENGTH_SHORT).show();
                 else {
-                    Toast.makeText(getActivity(), "Pictures saved", Toast.LENGTH_SHORT).show();
-                    SAVE_COUNT++;
-                    ImagePairs newImagePair = new ImagePairs();
-                    newImagePair.setOwnerName(ParseUser.getCurrentUser().getString("username"));
-                    newImagePair.setNormalImage(normalPictureToBeSaved);
-                    newImagePair.setScrambledImage(scrambledPictureToBeSaved);
-                    MainActivity.picturesList.add(newImagePair);
+                    if (scrambledPictureToBeSaved != null && normalPictureToBeSaved != null) {
+                        Toast.makeText(getActivity(), "Pictures saved", Toast.LENGTH_SHORT).show();
+                        SAVE_COUNT++;
+                        ImagePairs newImagePair = new ImagePairs();
+                        newImagePair.setOwnerName(ParseUser.getCurrentUser().getString("username"));
+                        newImagePair.setNormalImage(normalPictureToBeSaved);
+                        newImagePair.setScrambledImage(scrambledPictureToBeSaved);
+                        MainActivity.picturesList.add(newImagePair);
 
-                    normalPictureFromListView = normalPictureToBeSaved;
-                    scrambledPictureFromListView = scrambledPictureToBeSaved;
+                        normalPictureFromListView = normalPictureToBeSaved;
+                        scrambledPictureFromListView = scrambledPictureToBeSaved;
 
-                    mListener.fromScramFragSaveToDatabase(normalPictureToBeSaved, scrambledPictureToBeSaved);
+                        mListener.fromScramFragSaveToDatabase(normalPictureToBeSaved, scrambledPictureToBeSaved);
+                    } else {
+                        Toast.makeText(getActivity(), "Scramble/Descramble picture first", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
                 break;
