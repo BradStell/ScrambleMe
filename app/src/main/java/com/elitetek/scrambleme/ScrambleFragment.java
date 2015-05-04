@@ -194,7 +194,7 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
                 share.setType("image/jpeg");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 pictureBeingViewed.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                File f = new File(MainActivity.PICTURE_PATH + "temporary_file.jpg");
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
                 try {
                     f.createNewFile();
                     FileOutputStream fo = new FileOutputStream(f);
@@ -323,11 +323,6 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
         Bitmap[] scrambledArray = new Bitmap[imgs.length];
 
-        Random rand = new Random(System.nanoTime());
-        int[] used = new int[25];
-        int[] key = new int[25];
-        int number;
-
         for (int i = 0; i < MainActivity.KEY.length; i++)
             scrambledArray[i] = imgs[MainActivity.KEY[i]];
 
@@ -353,11 +348,11 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
         Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.PICTURE_PATH + path, bmOptions);
 
-        int nh = (int) (bitmap.getHeight() * (512.0 / bitmap.getWidth()));
-        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+        //int nh = (int) (bitmap.getHeight() * (512.0 / bitmap.getWidth()));
+       // Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
 
         normalPictureToBeSaved = bitmap;
-        pictureToScramble.setImageBitmap(scaled);
+        pictureToScramble.setImageBitmap(bitmap);
         pictureBeingViewed = bitmap;
         return bitmap;
     }
@@ -379,11 +374,11 @@ public class ScrambleFragment extends Fragment implements View.OnClickListener {
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 
-        int nh = (int) (bitmap.getHeight() * (512.0 / bitmap.getWidth()));
-        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+        //int nh = (int) (bitmap.getHeight() * (512.0 / bitmap.getWidth()));
+        //Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
 
         normalPictureToBeSaved = bitmap;
-        pictureToScramble.setImageBitmap(scaled);
+        pictureToScramble.setImageBitmap(bitmap);
         pictureBeingViewed = bitmap;
         return bitmap;
     }
